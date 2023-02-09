@@ -10,45 +10,64 @@ format:
     preview-links: auto
     footer: <https://storopoli.github.io/CHANGEME>
     callout-appearance: minimal
+execute:
+  echo: true
+  cache: true
 jupyter: julia-1.8
 ---
 
 ```{julia}
+#| echo: false
+#| output: false
 ENV["PYCALL_JL_RUNTIME_PYTHON"] = Sys.which("python")
 using PyCall
 ```
 
 ## Agenda
 
-</br>
-</br>
+</br> </br>
 
 ::: incremental
-
-1. speed
-2. ease-of-use
-3. composability
+1.  speed
+2.  ease-of-use
+3.  composability
 :::
 
 ## What I Assume?
 
-</br>
-</br>
+</br> </br>
 
 ::: incremental
+-   Python background
+-   scientific computing background
+:::
 
-- Python background
-- scientific computing background
+## Julia is past beyond "experimental" {.smaller .scrollable}
+
+:::incremental
+- NASA uses Julia in a supercomputer to analyze the ["Largest Batch of Earth-Sized Planets Ever Found"](https://exoplanets.nasa.gov/news/1669/seven-rocky-trappist-1-planets-may-be-made-of-similar-stuff/) and achieve a whopping **1,000x speedup** to catalog 188 million astronomical objects in 15 minutes.
+- [The Climate Modeling Alliance (CliMa)](https://clima.caltech.edu/) is using mostly Julia to **model climate in the GPU and CPU**.
+Launched in 2018 in collaboration with researchers at Caltech, the NASA Jet Propulsion Laboratory, and the Naval Postgraduate School, CliMA is utilizing recent progress in computational science to develop an Earth system model that can predict droughts, heat waves, and rainfall with unprecedented precision and speed.
+- [US Federal Aviation Administration (FAA) is developing an **Airborne Collision Avoidance System (ACAS-X)** using Julia](https://youtu.be/19zm1Fn0S9M).
+This is a nice example of the "Two-Language Problem" (see @sec:julia_accomplish).
+Previous solutions used Matlab to develop the algorithms and C++ for a fast implementation.
+Now, FAA is using one language to do all this: Julia.
+- [**175x speedup** for Pfizer's pharmacology models using GPUs in Julia](https://juliahub.com/case-studies/pfizer/).
+It was presented as a [poster](https://chrisrackauckas.com/assets/Posters/ACoP11_Poster_Abstracts_2020.pdf) in the 11th American Conference of Pharmacometrics (ACoP11) and [won a quality award](https://web.archive.org/web/20210121164011/https://www.go-acop.org/abstract-awards).
+- [The Attitude and Orbit Control Subsystem (AOCS) of the Brazilian satellite Amazonia-1 is **written 100% in Julia**](https://discourse.julialang.org/t/julia-and-the-satellite-amazonia-1/57541) by Ronan Arraes Jardim Chagas (<https://ronanarraes.com/>).
+- [Brazil's national development bank (BNDES) ditched a paid solution and opted for open-source Julia modeling and gained a **10x speedup**.](https://youtu.be/NY0HcGqHj3g)
+:::
+
+::: footer
+If this is not enough, there are more case studies in [JuliaHub website](https://juliahub.com/case-studies/).
 :::
 
 ## Speed
 
 </br>
 
-::: {.callout-note}
-
+::: callout-note
 **Julia is fast!**
-
 :::
 
 </br>
@@ -58,9 +77,8 @@ Two examples:
 :::
 
 ::: incremental
-
-- Data Wrangling: `pandas` versus `DataFrames.jl`
-- ODE solving: `PYTHON` versus `DifferentialEquations.jl`
+-   Data Wrangling: `pandas` versus `DataFrames.jl`
+-   ODE solving: `PYTHON` versus `DifferentialEquations.jl`
 :::
 
 ## Benchmarking --- Data Wrangling
@@ -68,18 +86,16 @@ Two examples:
 Common data wrangling scenario doing "split-apply-combine" operations.
 
 ::: incremental
-
-- 10,000 observations
-- 1 categorical variable `x` $\in \{\mathrm{A}, \mathrm{B}, \mathrm{C}, \mathrm{D}\}$
-- 2 continuous variables:
-  - `y` $\in [0, 1]$
-  - `z` $\text{Normal}(0, 1)$
+-   10,000 observations
+-   1 categorical variable `x` $\in \{\mathrm{A}, \mathrm{B}, \mathrm{C}, \mathrm{D}\}$
+-   2 continuous variables:
+    -   `y` $\in [0, 1]$
+    -   `z` $\text{Normal}(0, 1)$
 :::
 
 ## Benchmarking --- Data Wrangling (Python)
 
 ```{julia}
-#| echo: true
 using BenchmarkTools
 py"""
 import pandas as pd
@@ -98,7 +114,6 @@ df = pd.DataFrame({'x': np.random.choice(['A', 'B', 'C', 'D'], n, replace=True),
 ## Benchmarking --- Data Wrangling (Julia)
 
 ```{julia}
-#| echo: true
 using Random
 using DataFrames
 using BenchmarkTools
@@ -108,7 +123,7 @@ Random.seed!(123)
 n = 10_000
 
 df = DataFrame(
-    x=rand('A':'N', n),
+    x=rand('A':'D', n),
     y=rand(n),
     z=randn(n),
 )
@@ -126,3 +141,100 @@ end;
 ## Benchmarking --- ODE Solver (Python)
 
 ## Composability
+
+::: incremental
+-   It is very easy to create new packages that have types and functions.
+
+-   You can extend other package's functions, including Julia's `Base` standard library to you new types.
+
+-   And you can also create new functions for other Package's types.
+:::
+
+## Composability - Example with `Point`
+
+```{julia}
+#| output: false
+struct Point
+  x::Float64
+  y::Float64
+end
+
+function Base.:+(x::Point, y::Point)
+  return Point(x.x + y.x, x.y + y.y)
+end
+
+function distance(x::Point, y::Point)
+  return sqrt( (x.x - y.x)^2 + (x.y - y.y)^2 )
+end
+
+p1 = Point(1, 1); p2 = Point(2, 2)
+```
+
+. . .
+
+```{julia}
+p1 + p2
+```
+
+. . .
+
+```{julia}
+distance(p1, p2)
+```
+
+## Composability - Example with Autodiff {.smaller}
+
+Suppose you are creating a new sort of graph structure that allows for differentiation and integration, i.e you can take gradients, Jacobians, Hessians and so on.
+
+. . .
+
+</br>
+
+Imagine having to code the whole API in `libtorch` (`PyTorch` C++ backend). Including:
+
+. . .
+
+::: incremental
+-   types
+-   constructors
+-   linear algebra functions
+-   autodiff rules
+:::
+
+. . .
+
+And in the end you can *only* use PyTorch. You would have to do the whole thing again for JAX or any other autodiff backend.
+
+## Composability - Example with Autodiff {.smaller}
+
+Now let's see how we do this in Julia?
+
+::: incremental
+-   We can create a package `DifferentialGraph.jl`.
+-   Add `ChainRulesCore.jl` as a dependency.
+-   Create forward- and reverse-mode derivative rules: `rrules` or `frules`
+:::
+
+. . .
+
+Now we can use you differential graphs with all of these backends:
+
+::: incremental
+-   `ForwardDiff.jl`: forward-mode AD
+-   `ReverseDiff.jl`: tape-based reverse-mode AD
+-   `Zygote.jl`: source-to-source reverse-mode AD
+-   `Enzyme.jl`: Julia bindings for Enzyme which ADs LLVM (low-level)
+-   `Diffractor.jl`: experimental mixed-mode AD meant to replace Zygote.jl
+:::
+
+. . .
+
+::: footer
+Since your graph has derivatives you can use gradient-based solvers to perform optimization.
+:::
+
+## Composability - Examples from the Julia Ecosystem
+
+- Bayesian Neural Nets: `Flux.jl` neural network inside a `Turing.jl` model
+- Bayesian COVID modeling: `DifferentialEquations.jl` ODE inside a `Turing.jl` model
+- Quaternion ODE solver in the GPU: `Quaternions.jl` types in a `DifferentialEquations.jl` ODE running in `CuArrays` from `CUDA.jl`.

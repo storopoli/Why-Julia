@@ -34,3 +34,4 @@ Manifest.toml
 
 # Python venv
 /env/
+pyproject.toml
