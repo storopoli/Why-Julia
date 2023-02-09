@@ -15,11 +15,21 @@ jobs:
         uses: quarto-dev/quarto-actions/setup@v2
         with:
           # To install LaTeX to build PDF book 
-          tinytex: true 
+          tinytex: false # we don't need latex 
           # uncomment below and fill to pin a version
           # version: SPECIFIC-QUARTO-VERSION-HERE
       
-      # add software dependencies here
+      - uses: julia-actions/setup-julia@v1
+        with:
+          version: "1"
+      - run: julia --color=yes --project -e 'using Pkg; Pkg.instantiate()'
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
+          cache: 'pip'
+      - run: pip install jupyter # (if jupyter is not part of your requirements.txt)
+      - run: pip install -r requirements.txt
 
       - name: Publish to GitHub Pages (and render)
         uses: quarto-dev/quarto-actions/publish@v2
