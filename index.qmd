@@ -9,6 +9,7 @@ format:
       buttons: false
     preview-links: auto
     footer: <https://storopoli.github.io/Why-Julia>
+    logo: images/julia-dots.svg
     callout-appearance: minimal
 execute:
   echo: true
@@ -44,6 +45,10 @@ using PyCall
 - scientific computing background
 :::
 
+## So let's dive in?
+
+![](images/julia_python_meme.jpg){fig-align="center"}
+
 ## Julia is past beyond "experimental" {.smaller .scrollable}
 
 :::incremental
@@ -54,7 +59,7 @@ using PyCall
    is using mostly Julia to **model climate in the GPU and CPU**.
 Launched in 2018 in collaboration with researchers at Caltech, the NASA Jet Propulsion Laboratory, and the Naval Postgraduate School, CliMA is utilizing recent progress in computational science to develop an Earth system model that can predict droughts, heat waves, and rainfall with unprecedented precision and speed.
 - [US Federal Aviation Administration (FAA) is developing an **Airborne Collision Avoidance System (ACAS-X)** using Julia](https://youtu.be/19zm1Fn0S9M).
-This is a nice example of the "Two-Language Problem" (see @sec:julia_accomplish).
+This is a nice example of the "Two-Language Problem".
 Previous solutions used Matlab to develop the algorithms and C++ for a fast implementation.
 Now, FAA is using one language to do all this: Julia.
 - [**175x speedup** for Pfizer's pharmacology models using GPUs in Julia](https://juliahub.com/case-studies/pfizer/).
@@ -71,9 +76,7 @@ If this is not enough, there are more case studies in [JuliaHub website](https:/
 
 </br>
 
-::: callout-note
 **Julia is fast!**
-:::
 
 </br>
 
@@ -84,7 +87,7 @@ Two examples:
 ::: incremental
 
 - Data Wrangling: `pandas` versus `DataFrames.jl`
-- ODE solving: `PYTHON` versus `DifferentialEquations.jl`
+- ODE solving: `scipy` versus `DifferentialEquations.jl`
 :::
 
 ## Benchmarking --- Data Wrangling
@@ -217,6 +220,28 @@ def simplependulum(u, t, g, L):
 
 ## Why Julia is so Fast?
 
+![LLVM](images/LLVM_logo.png)
+
+::: incremental
+
+- *just-in-time* compilation for the LLVM compiler
+- exposes everything in *intermediate representation* code
+- then LLVM does what does best: **OPTIMIZE**
+- including `for`-loops
+:::
+
+## Why Julia is so Fast? --- LLVM code {.scrollable}
+
+```{julia}
+#| output-location: slide
+using Statistics: mean
+@code_llvm mean(1:10)
+```
+
+::: footer
+output in next slide
+:::
+
 ## Ease of Use
 
 ## Julia Syntax
@@ -331,3 +356,23 @@ Since your graph has derivatives you can use gradient-based solvers to perform o
 :::
 
 ## It's not all rainbows
+
+## Some nice packages {.scrollable}
+
+::: incremental
+
+- The whole [standard library](https://docs.julialang.org/en/v1/), especially [`LinearAlgebra`](https://docs.julialang.org/en/v1/stdlib/LinearAlgebra/) module
+- [`DifferentialEquations.jl`](https://docs.sciml.ai/DiffEqDocs/latest/), [`NeuralPDE.jl`](https://docs.sciml.ai/NeuralPDE/dev/)
+   and the whole [SciML package ecosystem](https://sciml.ai)
+- [`Flux.jl`](https://fluxml.ai/) and [`MLJ.jl`](https://alan-turing-institute.github.io/MLJ.jl/dev/)
+- [`DataFrames.jl`](https://dataframes.juliadata.org/stable/) and [`DataFramesMeta.jl`](https://juliadata.github.io/DataFramesMeta.jl/stable/)
+- [`Makie.jl`](https://makie.org) and [`AlgebraOfGraphics.jl`](https://aog.makie.org)
+- [`Turing.jl`](https://turing.ml)
+- [`Pluto.jl`](https://plutojl.org)
+- [`JuMP`](https://jump.dev)
+- [`Distributions.jl`](https://juliastats.org/Distributions.jl/latest/)
+:::
+
+::: footer
+these are all clickable links
+:::
