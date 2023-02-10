@@ -19,17 +19,23 @@ jobs:
           # uncomment below and fill to pin a version
           # version: SPECIFIC-QUARTO-VERSION-HERE
       
-      - uses: julia-actions/setup-julia@v1
+      - name: Set up Julia
+        uses: julia-actions/setup-julia@v1
         with:
           version: "1"
-      - run: julia --color=yes --project -e 'using Pkg; Pkg.instantiate()'
+      - name: Instantiate Julia project
+        run: julia --color=yes --project -e 'using Pkg; Pkg.instantiate()'
 
-      - uses: actions/setup-python@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
           python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
           cache: 'pip'
-      - run: pip install jupyter # (if jupyter is not part of your requirements.txt)
+      - name: Install Jupyter
+        run: pip install jupyter # (if jupyter is not part of your requirements.txt)
+      - name: Install Python project
       - run: pip install -r requirements.txt
+      - run: echo "PYTHON=$(which python)" >> $GITHUB_ENV
 
       - name: Publish to GitHub Pages (and render)
         uses: quarto-dev/quarto-actions/publish@v2

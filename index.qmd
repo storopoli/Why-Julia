@@ -8,7 +8,7 @@ format:
     chalkboard: 
       buttons: false
     preview-links: auto
-    footer: <https://storopoli.github.io/CHANGEME>
+    footer: <https://storopoli.github.io/Why-Julia>
     callout-appearance: minimal
 execute:
   echo: true
@@ -28,9 +28,10 @@ using PyCall
 </br> </br>
 
 ::: incremental
-1.  speed
-2.  ease-of-use
-3.  composability
+
+1. speed
+2. ease-of-use
+3. composability
 :::
 
 ## What I Assume?
@@ -38,15 +39,19 @@ using PyCall
 </br> </br>
 
 ::: incremental
--   Python background
--   scientific computing background
+
+- Python background
+- scientific computing background
 :::
 
 ## Julia is past beyond "experimental" {.smaller .scrollable}
 
 :::incremental
-- NASA uses Julia in a supercomputer to analyze the ["Largest Batch of Earth-Sized Planets Ever Found"](https://exoplanets.nasa.gov/news/1669/seven-rocky-trappist-1-planets-may-be-made-of-similar-stuff/) and achieve a whopping **1,000x speedup** to catalog 188 million astronomical objects in 15 minutes.
-- [The Climate Modeling Alliance (CliMa)](https://clima.caltech.edu/) is using mostly Julia to **model climate in the GPU and CPU**.
+
+- NASA uses Julia in a supercomputer to analyze the
+   ["Largest Batch of Earth-Sized Planets Ever Found"](https://exoplanets.nasa.gov/news/1669/seven-rocky-trappist-1-planets-may-be-made-of-similar-stuff/) and achieve a whopping **1,000x speedup** to catalog 188 million astronomical objects in 15 minutes.
+- [The Climate Modeling Alliance (CliMa)](https://clima.caltech.edu/)
+   is using mostly Julia to **model climate in the GPU and CPU**.
 Launched in 2018 in collaboration with researchers at Caltech, the NASA Jet Propulsion Laboratory, and the Naval Postgraduate School, CliMA is utilizing recent progress in computational science to develop an Earth system model that can predict droughts, heat waves, and rainfall with unprecedented precision and speed.
 - [US Federal Aviation Administration (FAA) is developing an **Airborne Collision Avoidance System (ACAS-X)** using Julia](https://youtu.be/19zm1Fn0S9M).
 This is a nice example of the "Two-Language Problem" (see @sec:julia_accomplish).
@@ -77,8 +82,9 @@ Two examples:
 :::
 
 ::: incremental
--   Data Wrangling: `pandas` versus `DataFrames.jl`
--   ODE solving: `PYTHON` versus `DifferentialEquations.jl`
+
+- Data Wrangling: `pandas` versus `DataFrames.jl`
+- ODE solving: `PYTHON` versus `DifferentialEquations.jl`
 :::
 
 ## Benchmarking --- Data Wrangling
@@ -86,11 +92,12 @@ Two examples:
 Common data wrangling scenario doing "split-apply-combine" operations.
 
 ::: incremental
--   10,000 observations
--   1 categorical variable `x` $\in \{\mathrm{A}, \mathrm{B}, \mathrm{C}, \mathrm{D}\}$
--   2 continuous variables:
-    -   `y` $\in [0, 1]$
-    -   `z` $\text{Normal}(0, 1)$
+
+- 10,000 observations
+- 1 categorical variable `x` $\in \{\mathrm{A}, \mathrm{B}, \mathrm{C}, \mathrm{D}\}$
+- 2 continuous variables:
+  - `y` $\in [0, 1]$
+  - `z` $\text{Normal}(0, 1)$
 :::
 
 ## Benchmarking --- Data Wrangling (Python)
@@ -100,7 +107,6 @@ using BenchmarkTools
 py"""
 import pandas as pd
 import numpy as np
-import timeit
 
 n = 10000
 
@@ -136,18 +142,97 @@ end;
 
 ## Benchmarking --- ODE Solver
 
+Second order non-linear ODE example with a **simple pendulum**
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+$$
+\begin{align*}
+&\dot{\theta} = d{\theta} \\
+&\dot{d\theta} = - \frac{g}{L}{\sin(\theta)}
+\end{align*}
+$$
+
+:::
+
+::: {.column width="50%"}
+
+![](images/pendulum.png){width=60%}
+:::
+
+::::
+
 ## Benchmarking --- ODE Solver (Julia)
 
+```{julia}
+using DifferentialEquations
+
+# Constants
+const g = 9.81
+L = 1.0
+
+# Initial Conditions
+u₀ = [0, π/2]
+tspan = (0.0, 6.3)
+
+# Define the problem
+function simplependulum(du, u, p, t)
+    θ, dθ = u
+    du[1] = dθ
+    du[2] = -(g/L)*sin(θ)
+end
+
+# Pass to solvers
+prob = ODEProblem(simplependulum, u₀, tspan)
+# RK 4/5th order solver (Tsitouras)
+@btime solve(prob, Tsit5(); saveat=range(tspan...; length=1_000));
+```
+
 ## Benchmarking --- ODE Solver (Python)
+
+```{julia}
+py"""
+import numpy as np
+from scipy.integrate import odeint
+
+# Constants
+g = 9.81
+L = 1.0
+
+# Initial Conditions
+u0 = [0, np.pi/2]
+tspan = np.linspace(0.0, 6.3, 1000)
+
+def simplependulum(u, t, g, L):
+    theta, dtheta = u
+    dydt = [dtheta, -(g/L)*np.sin(theta)]
+    return dydt
+"""
+
+# RK 4/5th order solver (Dormand-Prince)
+@btime py"odeint(simplependulum, u0, tspan, args=(g, L))";
+```
+
+## Why Julia is so Fast?
+
+## Ease of Use
+
+## Julia Syntax
+
+keyword arguments
 
 ## Composability
 
 ::: incremental
--   It is very easy to create new packages that have types and functions.
 
--   You can extend other package's functions, including Julia's `Base` standard library to you new types.
+- It is very easy to create new packages that have types and functions.
 
--   And you can also create new functions for other Package's types.
+- You can extend other package's functions,
+  including Julia's `Base` standard library to you new types.
+
+- And you can also create new functions for other Package's types.
 :::
 
 ## Composability - Example with `Point`
@@ -195,24 +280,27 @@ Imagine having to code the whole API in `libtorch` (`PyTorch` C++ backend). Incl
 . . .
 
 ::: incremental
--   types
--   constructors
--   linear algebra functions
--   autodiff rules
+
+- types
+- constructors
+- linear algebra functions
+- autodiff rules
 :::
 
 . . .
 
-And in the end you can *only* use PyTorch. You would have to do the whole thing again for JAX or any other autodiff backend.
+And in the end you can *only* use PyTorch.
+You would have to do the whole thing again for JAX or any other autodiff backend.
 
-## Composability - Example with Autodiff {.smaller}
+## Composability - Example with Autodiff (Julia) {.smaller}
 
 Now let's see how we do this in Julia?
 
 ::: incremental
--   We can create a package `DifferentialGraph.jl`.
--   Add `ChainRulesCore.jl` as a dependency.
--   Create forward- and reverse-mode derivative rules: `rrules` or `frules`
+
+- We can create a package `DifferentialGraph.jl`.
+- Add `ChainRulesCore.jl` as a dependency.
+- Create forward- and reverse-mode derivative rules: `rrules` or `frules`
 :::
 
 . . .
@@ -220,14 +308,13 @@ Now let's see how we do this in Julia?
 Now we can use you differential graphs with all of these backends:
 
 ::: incremental
--   `ForwardDiff.jl`: forward-mode AD
--   `ReverseDiff.jl`: tape-based reverse-mode AD
--   `Zygote.jl`: source-to-source reverse-mode AD
--   `Enzyme.jl`: Julia bindings for Enzyme which ADs LLVM (low-level)
--   `Diffractor.jl`: experimental mixed-mode AD meant to replace Zygote.jl
-:::
 
-. . .
+- `ForwardDiff.jl`: forward-mode AD
+- `ReverseDiff.jl`: tape-based reverse-mode AD
+- `Zygote.jl`: source-to-source reverse-mode AD
+- `Enzyme.jl`: Julia bindings for Enzyme which ADs LLVM (low-level)
+- `Diffractor.jl`: experimental mixed-mode AD meant to replace Zygote.jl
+:::
 
 ::: footer
 Since your graph has derivatives you can use gradient-based solvers to perform optimization.
@@ -235,6 +322,12 @@ Since your graph has derivatives you can use gradient-based solvers to perform o
 
 ## Composability - Examples from the Julia Ecosystem
 
+::: incremental
+
 - Bayesian Neural Nets: `Flux.jl` neural network inside a `Turing.jl` model
 - Bayesian COVID modeling: `DifferentialEquations.jl` ODE inside a `Turing.jl` model
-- Quaternion ODE solver in the GPU: `Quaternions.jl` types in a `DifferentialEquations.jl` ODE running in `CuArrays` from `CUDA.jl`.
+- Quaternion ODE solver in the GPU: `Quaternions.jl` types in a `DifferentialEquations.jl`
+   ODE running in `CuArrays` from `CUDA.jl`.
+:::
+
+## It's not all rainbows
