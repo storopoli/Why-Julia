@@ -417,13 +417,17 @@
 </ul>
 </div>
 </section>
+<section id="so-lets-dive-in" class="slide level2">
+<h2>So let’s dive in?</h2>
+
+<img data-src="images/julia_python_meme.jpg" class="r-stretch quarto-figure-center"></section>
 <section id="julia-is-past-beyond-experimental" class="slide level2 smaller scrollable">
 <h2>Julia is past beyond “experimental”</h2>
 <div>
 <ul>
 <li class="fragment">NASA uses Julia in a supercomputer to analyze the <a href="https://exoplanets.nasa.gov/news/1669/seven-rocky-trappist-1-planets-may-be-made-of-similar-stuff/">“Largest Batch of Earth-Sized Planets Ever Found”</a> and achieve a whopping <strong>1,000x speedup</strong> to catalog 188 million astronomical objects in 15 minutes.</li>
 <li class="fragment"><a href="https://clima.caltech.edu/">The Climate Modeling Alliance (CliMa)</a> is using mostly Julia to <strong>model climate in the GPU and CPU</strong>. Launched in 2018 in collaboration with researchers at Caltech, the NASA Jet Propulsion Laboratory, and the Naval Postgraduate School, CliMA is utilizing recent progress in computational science to develop an Earth system model that can predict droughts, heat waves, and rainfall with unprecedented precision and speed.</li>
-<li class="fragment"><a href="https://youtu.be/19zm1Fn0S9M">US Federal Aviation Administration (FAA) is developing an <strong>Airborne Collision Avoidance System (ACAS-X)</strong> using Julia</a>. This is a nice example of the “Two-Language Problem” (see <span class="citation" data-cites="sec:julia_accomplish">@sec:julia_accomplish</span>). Previous solutions used Matlab to develop the algorithms and C++ for a fast implementation. Now, FAA is using one language to do all this: Julia.</li>
+<li class="fragment"><a href="https://youtu.be/19zm1Fn0S9M">US Federal Aviation Administration (FAA) is developing an <strong>Airborne Collision Avoidance System (ACAS-X)</strong> using Julia</a>. This is a nice example of the “Two-Language Problem”. Previous solutions used Matlab to develop the algorithms and C++ for a fast implementation. Now, FAA is using one language to do all this: Julia.</li>
 <li class="fragment"><a href="https://juliahub.com/case-studies/pfizer/"><strong>175x speedup</strong> for Pfizer’s pharmacology models using GPUs in Julia</a>. It was presented as a <a href="https://chrisrackauckas.com/assets/Posters/ACoP11_Poster_Abstracts_2020.pdf">poster</a> in the 11th American Conference of Pharmacometrics (ACoP11) and <a href="https://web.archive.org/web/20210121164011/https://www.go-acop.org/abstract-awards">won a quality award</a>.</li>
 <li class="fragment"><a href="https://discourse.julialang.org/t/julia-and-the-satellite-amazonia-1/57541">The Attitude and Orbit Control Subsystem (AOCS) of the Brazilian satellite Amazonia-1 is <strong>written 100% in Julia</strong></a> by Ronan Arraes Jardim Chagas (<a href="https://ronanarraes.com/" class="uri">https://ronanarraes.com/</a>).</li>
 <li class="fragment"><a href="https://youtu.be/NY0HcGqHj3g">Brazil’s national development bank (BNDES) ditched a paid solution and opted for open-source Julia modeling and gained a <strong>10x speedup</strong>.</a></li>
@@ -436,13 +440,7 @@
 <section id="speed" class="slide level2">
 <h2>Speed</h2>
 <p><br></p>
-<div class="callout callout-note no-icon callout-style-simple">
-<div class="callout-body">
-<div class="callout-content">
 <p><strong>Julia is fast!</strong></p>
-</div>
-</div>
-</div>
 <p><br></p>
 <div class="fragment fade-in">
 <p>Two examples:</p>
@@ -450,7 +448,7 @@
 <div>
 <ul>
 <li class="fragment">Data Wrangling: <code>pandas</code> versus <code>DataFrames.jl</code></li>
-<li class="fragment">ODE solving: <code>PYTHON</code> versus <code>DifferentialEquations.jl</code></li>
+<li class="fragment">ODE solving: <code>scipy</code> versus <code>DifferentialEquations.jl</code></li>
 </ul>
 </div>
 </section>
@@ -485,7 +483,7 @@
 <span id="cb1-11"><a href="#cb1-11"></a><span class="st">"""</span></span>
 <span id="cb1-12"><a href="#cb1-12"></a><span class="pp">@btime</span> py<span class="st">"df.groupby('x').agg({'y': 'median', 'z': 'mean'})"</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  711.546 μs (3 allocations: 144 bytes)</code></pre>
+<pre><code>  1.347 ms (3 allocations: 144 bytes)</code></pre>
 </div>
 </div>
 </section>
@@ -511,7 +509,7 @@
 <span id="cb3-17"><a href="#cb3-17"></a>    <span class="fu">combine</span>(<span class="op">:</span>y <span class="op">=&gt;</span> median, <span class="op">:</span>z <span class="op">=&gt;</span> mean)</span>
 <span id="cb3-18"><a href="#cb3-18"></a><span class="cf">end</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  169.422 μs (502 allocations: 466.38 KiB)</code></pre>
+<pre><code>  170.499 μs (501 allocations: 466.35 KiB)</code></pre>
 </div>
 </div>
 </section>
@@ -556,7 +554,7 @@
 <span id="cb5-20"><a href="#cb5-20"></a><span class="co"># RK 4/5th order solver (Tsitouras)</span></span>
 <span id="cb5-21"><a href="#cb5-21"></a><span class="pp">@btime</span> <span class="fu">solve</span>(prob, <span class="fu">Tsit5</span>(); saveat<span class="op">=</span><span class="fu">range</span>(tspan<span class="op">...</span>; length<span class="op">=</span><span class="fl">1_000</span>));</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  99.569 μs (1838 allocations: 141.00 KiB)</code></pre>
+<pre><code>  191.872 μs (1838 allocations: 141.00 KiB)</code></pre>
 </div>
 </div>
 </section>
@@ -584,14 +582,63 @@
 <span id="cb7-19"><a href="#cb7-19"></a><span class="co"># RK 4/5th order solver (Dormand-Prince)</span></span>
 <span id="cb7-20"><a href="#cb7-20"></a><span class="pp">@btime</span> py<span class="st">"odeint(simplependulum, u0, tspan, args=(g, L))"</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  513.689 μs (29 allocations: 17.09 KiB)</code></pre>
+<pre><code>  509.352 μs (29 allocations: 17.09 KiB)</code></pre>
 </div>
 </div>
 </section>
 <section id="why-julia-is-so-fast" class="slide level2">
 <h2>Why Julia is so Fast?</h2>
+
+<img data-src="images/LLVM_logo.png" class="r-stretch quarto-figure-center"><p class="caption">LLVM</p><div>
+<ul>
+<li class="fragment"><em>just-in-time</em> compilation for the LLVM compiler</li>
+<li class="fragment">exposes everything in <em>intermediate representation</em> code</li>
+<li class="fragment">then LLVM does what does best: <strong>OPTIMIZE</strong></li>
+<li class="fragment">including <code>for</code>-loops</li>
+</ul>
+</div>
 </section>
-<section id="ease-of-use" class="slide level2">
+<section id="why-julia-is-so-fast-llvm-code" class="slide level2 scrollable">
+<h2>Why Julia is so Fast? — LLVM code</h2>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1"></a><span class="im">using</span> <span class="bu">Statistics</span>: mean</span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="pp">@code_llvm</span> <span class="fu">mean</span>(<span class="fl">1</span><span class="op">:</span><span class="fl">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+<div class="footer">
+<p>output in next slide</p>
+</div>
+</section>
+<section id="why-julia-is-so-fast-llvm-code-output" class="slide level2 scrollable output-location-slide"><h2>Why Julia is so Fast? — LLVM code</h2><div class="cell output-location-slide" data-execution_count="7">
+<div class="cell-output cell-output-stdout">
+<pre><code>;  @ /cache/build/default-amdci4-2/julialang/julia-release-1-dot-8/usr/share/julia/stdlib/v1.8/Statistics/src/Statistics.jl:185 within `mean`
+define double @julia_mean_5356([2 x i64]* nocapture nonnull readonly align 8 dereferenceable(16) %0) #0 {
+top:
+;  @ /cache/build/default-amdci4-2/julialang/julia-release-1-dot-8/usr/share/julia/stdlib/v1.8/Statistics/src/Statistics.jl:186 within `mean`
+; ┌ @ range.jl:654 within `isempty`
+; │┌ @ range.jl:816 within `first`
+; ││┌ @ Base.jl:38 within `getproperty`
+     %1 = getelementptr inbounds [2 x i64], [2 x i64]* %0, i64 0, i64 0
+; │└└
+; │┌ @ range.jl:821 within `last`
+; ││┌ @ Base.jl:38 within `getproperty`
+     %2 = getelementptr inbounds [2 x i64], [2 x i64]* %0, i64 0, i64 1
+; │└└
+; │┌ @ operators.jl:382 within `&gt;`
+; ││┌ @ int.jl:83 within `&lt;`
+     %3 = load i64, i64* %2, align 8
+     %4 = load i64, i64* %1, align 8
+     %.not = icmp slt i64 %3, %4
+; └└└
+  %5 = add i64 %3, %4
+  %6 = sitofp i64 %5 to double
+  %7 = fmul double %6, 5.000000e-01
+  %common.ret.op = select i1 %.not, double 0x7FF8000000000000, double %7
+;  @ /cache/build/default-amdci4-2/julialang/julia-release-1-dot-8/usr/share/julia/stdlib/v1.8/Statistics/src/Statistics.jl within `mean`
+  ret double %common.ret.op
+}</code></pre>
+</div>
+</div></section><section id="ease-of-use" class="slide level2">
 <h2>Ease of Use</h2>
 </section>
 <section id="julia-syntax" class="slide level2">
@@ -610,34 +657,34 @@
 </section>
 <section id="composability---example-with-point" class="slide level2">
 <h2>Composability - Example with <code>Point</code></h2>
-<div class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">struct</span> Point</span>
-<span id="cb9-2"><a href="#cb9-2"></a>  x<span class="op">::</span><span class="dt">Float64</span></span>
-<span id="cb9-3"><a href="#cb9-3"></a>  y<span class="op">::</span><span class="dt">Float64</span></span>
-<span id="cb9-4"><a href="#cb9-4"></a><span class="kw">end</span></span>
-<span id="cb9-5"><a href="#cb9-5"></a></span>
-<span id="cb9-6"><a href="#cb9-6"></a><span class="kw">function</span> <span class="bu">Base</span>.<span class="op">:</span><span class="fu">+</span>(x<span class="op">::</span><span class="dt">Point</span>, y<span class="op">::</span><span class="dt">Point</span>)</span>
-<span id="cb9-7"><a href="#cb9-7"></a>  <span class="cf">return</span> <span class="fu">Point</span>(x.x <span class="op">+</span> y.x, x.y <span class="op">+</span> y.y)</span>
-<span id="cb9-8"><a href="#cb9-8"></a><span class="kw">end</span></span>
-<span id="cb9-9"><a href="#cb9-9"></a></span>
-<span id="cb9-10"><a href="#cb9-10"></a><span class="kw">function</span> <span class="fu">distance</span>(x<span class="op">::</span><span class="dt">Point</span>, y<span class="op">::</span><span class="dt">Point</span>)</span>
-<span id="cb9-11"><a href="#cb9-11"></a>  <span class="cf">return</span> <span class="fu">sqrt</span>( (x.x <span class="op">-</span> y.x)<span class="op">^</span><span class="fl">2</span> <span class="op">+</span> (x.y <span class="op">-</span> y.y)<span class="op">^</span><span class="fl">2</span> )</span>
-<span id="cb9-12"><a href="#cb9-12"></a><span class="kw">end</span></span>
-<span id="cb9-13"><a href="#cb9-13"></a></span>
-<span id="cb9-14"><a href="#cb9-14"></a>p1 <span class="op">=</span> <span class="fu">Point</span>(<span class="fl">1</span>, <span class="fl">1</span>); p2 <span class="op">=</span> <span class="fu">Point</span>(<span class="fl">2</span>, <span class="fl">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">struct</span> Point</span>
+<span id="cb11-2"><a href="#cb11-2"></a>  x<span class="op">::</span><span class="dt">Float64</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a>  y<span class="op">::</span><span class="dt">Float64</span></span>
+<span id="cb11-4"><a href="#cb11-4"></a><span class="kw">end</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a></span>
+<span id="cb11-6"><a href="#cb11-6"></a><span class="kw">function</span> <span class="bu">Base</span>.<span class="op">:</span><span class="fu">+</span>(x<span class="op">::</span><span class="dt">Point</span>, y<span class="op">::</span><span class="dt">Point</span>)</span>
+<span id="cb11-7"><a href="#cb11-7"></a>  <span class="cf">return</span> <span class="fu">Point</span>(x.x <span class="op">+</span> y.x, x.y <span class="op">+</span> y.y)</span>
+<span id="cb11-8"><a href="#cb11-8"></a><span class="kw">end</span></span>
+<span id="cb11-9"><a href="#cb11-9"></a></span>
+<span id="cb11-10"><a href="#cb11-10"></a><span class="kw">function</span> <span class="fu">distance</span>(x<span class="op">::</span><span class="dt">Point</span>, y<span class="op">::</span><span class="dt">Point</span>)</span>
+<span id="cb11-11"><a href="#cb11-11"></a>  <span class="cf">return</span> <span class="fu">sqrt</span>( (x.x <span class="op">-</span> y.x)<span class="op">^</span><span class="fl">2</span> <span class="op">+</span> (x.y <span class="op">-</span> y.y)<span class="op">^</span><span class="fl">2</span> )</span>
+<span id="cb11-12"><a href="#cb11-12"></a><span class="kw">end</span></span>
+<span id="cb11-13"><a href="#cb11-13"></a></span>
+<span id="cb11-14"><a href="#cb11-14"></a>p1 <span class="op">=</span> <span class="fu">Point</span>(<span class="fl">1</span>, <span class="fl">1</span>); p2 <span class="op">=</span> <span class="fu">Point</span>(<span class="fl">2</span>, <span class="fl">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
-<div class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1"></a>p1 <span class="op">+</span> p2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="8">
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1"></a>p1 <span class="op">+</span> p2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
 <pre><code>Point(3.0, 3.0)</code></pre>
 </div>
 </div>
 </div>
 <div class="fragment">
-<div class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">distance</span>(p1, p2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="9">
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">distance</span>(p1, p2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
 <pre><code>1.4142135623730951</code></pre>
 </div>
 </div>
@@ -702,7 +749,27 @@
 </section>
 <section id="its-not-all-rainbows" class="slide level2">
 <h2>It’s not all rainbows</h2>
-<div class="footer footer-default">
+</section>
+<section id="some-nice-packages" class="slide level2 scrollable">
+<h2>Some nice packages</h2>
+<div>
+<ul>
+<li class="fragment">The whole <a href="https://docs.julialang.org/en/v1/">standard library</a>, especially <a href="https://docs.julialang.org/en/v1/stdlib/LinearAlgebra/"><code>LinearAlgebra</code></a> module</li>
+<li class="fragment"><a href="https://docs.sciml.ai/DiffEqDocs/latest/"><code>DifferentialEquations.jl</code></a>, <a href="https://docs.sciml.ai/NeuralPDE/dev/"><code>NeuralPDE.jl</code></a> and the whole <a href="https://sciml.ai">SciML package ecosystem</a></li>
+<li class="fragment"><a href="https://fluxml.ai/"><code>Flux.jl</code></a> and <a href="https://alan-turing-institute.github.io/MLJ.jl/dev/"><code>MLJ.jl</code></a></li>
+<li class="fragment"><a href="https://dataframes.juliadata.org/stable/"><code>DataFrames.jl</code></a> and <a href="https://juliadata.github.io/DataFramesMeta.jl/stable/"><code>DataFramesMeta.jl</code></a></li>
+<li class="fragment"><a href="https://makie.org"><code>Makie.jl</code></a> and <a href="https://aog.makie.org"><code>AlgebraOfGraphics.jl</code></a></li>
+<li class="fragment"><a href="https://turing.ml"><code>Turing.jl</code></a></li>
+<li class="fragment"><a href="https://plutojl.org"><code>Pluto.jl</code></a></li>
+<li class="fragment"><a href="https://jump.dev"><code>JuMP</code></a></li>
+<li class="fragment"><a href="https://juliastats.org/Distributions.jl/latest/"><code>Distributions.jl</code></a></li>
+</ul>
+</div>
+<div class="footer">
+<p>these are all clickable links</p>
+</div>
+
+<img src="images/julia-dots.svg" class="slide-logo r-stretch"><div class="footer footer-default">
 <p><a href="https://storopoli.github.io/Why-Julia" class="uri">https://storopoli.github.io/Why-Julia</a></p>
 </div>
 </section>
