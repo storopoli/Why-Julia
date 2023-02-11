@@ -244,9 +244,57 @@ output in next slide
 
 ## Ease of Use
 
-## Julia Syntax
+The syntax is quite similar to Python.
 
-keyword arguments
+. . .
+
+But, no identation and every keyword needs an `end`.
+
+. . .
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+```julia
+for i in 1:10
+    println(i)
+end
+```
+
+:::
+
+::: {.column width="50%"}
+
+```python
+for i in range(10):
+    print(i)
+```
+
+:::
+
+::::
+
+## It's Julia all the way down
+
+If you need to find something just use the
+`@which` macro on a type or a function signature.
+
+</br>
+
+. . .
+
+```{julia}
+@which DataFrame # type
+```
+
+. . .
+
+</br>
+
+```{julia}
+@which mean(1:10) # function signature.
+```
 
 ## Composability
 
@@ -324,7 +372,7 @@ Now let's see how we do this in Julia?
 ::: incremental
 
 - We can create a package `DifferentialGraph.jl`.
-- Add `ChainRulesCore.jl` as a dependency.
+- Add [`ChainRulesCore.jl`](https://github.com/JuliaDiff/ChainRulesCore.jl) as a dependency.
 - Create forward- and reverse-mode derivative rules: `rrules` or `frules`
 :::
 
@@ -334,11 +382,11 @@ Now we can use you differential graphs with all of these backends:
 
 ::: incremental
 
-- `ForwardDiff.jl`: forward-mode AD
-- `ReverseDiff.jl`: tape-based reverse-mode AD
-- `Zygote.jl`: source-to-source reverse-mode AD
-- `Enzyme.jl`: Julia bindings for Enzyme which ADs LLVM (low-level)
-- `Diffractor.jl`: experimental mixed-mode AD meant to replace Zygote.jl
+- [`ForwardDiff.jl`](https://github.com/JuliaDiff/ForwardDiff.jl): forward-mode AD
+- [`ReverseDiff.jl`](https://github.com/JuliaDiff/ReverseDiff.jl): tape-based reverse-mode AD
+- [`Zygote.jl`](https://github.com/FluxML/Zygote.jl): source-to-source reverse-mode AD
+- [`Enzyme.jl`](https://github.com/EnzymeAD/Enzyme.jl): Julia bindings for Enzyme which ADs LLVM (low-level)
+- [`Diffractor.jl`](https://github.com/JuliaDiff/Diffractor.jl): experimental mixed-mode AD meant to replace Zygote.jl
 :::
 
 ::: footer
@@ -349,13 +397,51 @@ Since your graph has derivatives you can use gradient-based solvers to perform o
 
 ::: incremental
 
-- Bayesian Neural Nets: `Flux.jl` neural network inside a `Turing.jl` model
-- Bayesian COVID modeling: `DifferentialEquations.jl` ODE inside a `Turing.jl` model
-- Quaternion ODE solver in the GPU: `Quaternions.jl` types in a `DifferentialEquations.jl`
-   ODE running in `CuArrays` from `CUDA.jl`.
+- Bayesian Neural Nets: [`Flux.jl`](https://fluxml.ai/) neural network inside a [`Turing.jl`](https://turing.ml) model.
+- Bayesian COVID modeling: [`DifferentialEquations.jl`](https://github.com/SciML/DifferentialEquations.jl) ODE inside a [`Turing.jl`](https://turing.ml) model.
+- Quaternion ODE solver in the GPU: [`Quaternions.jl`](https://github.com/JuliaGeometry/Quaternions.jl) types in a [`DifferentialEquations.jl`](https://github.com/SciML/DifferentialEquations.jl)
+   ODE running in `CuArrays` from [`CUDA.jl`](https://github.com/JuliaGPU/CUDA.jl).
+:::
+
+## My Pitch {.scrollable}
+
+::: incremental
+
+- It is fast.
+- It is easy to use.
+- Learning the basics of Julia will make your life so much easier
+   in all other packages.
+   You don't need to learn specific package syntax to be effective in
+   using a certain package.
+- A bliss to install in Windows, Mac, and Linux (even in clusters).
+- Very good community, check the [discourse](discourse.julialang.org).
+- Very "nerdy", "mathy", and "geeky" userbase.
+- If you are creating new stuff, like research or algorithms,
+   you don't want to have to stumble upon FORTRAN or C code
+   (`scipy`, `numpy`, `pytorch` etc.).
+   In Julia everything is in Julia.
+- You can easily mix-and-match types and functions from different packages,
+   as you saw in the previous slide.
+- Good language interop:
+  - C: [standard library](https://docs.julialang.org/en/v1/manual/calling-c-and-fortran-code/)
+  - FORTRAN: [standard library](https://docs.julialang.org/en/v1/manual/calling-c-and-fortran-code/)
+  - Python: [`PyCall.jl`](https://github.com/JuliaPy/PyCall.jl)
+  - R: [`RCall.jl`](https://github.com/JuliaInterop/RCall.jl)
 :::
 
 ## It's not all rainbows
+
+::: incremental
+
+- Hard to onboard people. Sometimes they don't want to learn new stuff
+   (I mean we still have FORTRAN around ...).
+- Not widely used in the marketplace (but tons of academic usage).
+- Some package ecosystems are not mature enough, e.g. survival analysis.
+   But, differential equations is way more mature than other
+   scientific computing languages.
+- In my point of view, Julia's strength in in **scientific computing**.
+   For all other things, you might not have additional benefits.
+:::
 
 ## Some nice packages {.scrollable}
 
@@ -376,3 +462,43 @@ Since your graph has derivatives you can use gradient-based solvers to perform o
 ::: footer
 these are all clickable links
 :::
+
+## Packages Used
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+```{julia}
+#| echo: false
+using Pkg
+deps = [pair.second for pair in Pkg.dependencies()]
+deps = filter(p -> p.is_direct_dep, deps)
+deps = filter(p -> !isnothing(p.version), deps)
+list = ["$(p.name) $(p.version)" for p in deps]
+sort!(list)
+println("Julia: $(VERSION)")
+println(join(list, '\n'))
+```
+
+:::
+
+::: {.column width="50%"}
+
+```{julia}
+#| echo: false
+py"""
+import sys
+import numpy as np
+import scipy
+import pandas as pd
+
+print(f"Python: {sys.version}")
+print(f"numpy: {np.__version__}")
+print(f"scipy: {scipy.__version__}")
+print(f"pandas: {pd.__version__}")
+"""
+```
+
+:::
+::::
