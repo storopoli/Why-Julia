@@ -1,6 +1,7 @@
 ---
 title: "Why Julia?"
 subtitle: "A gentle pitch"
+author: "Jose Storopoli, PhD"
 format:
   revealjs: 
     slide-number: true
@@ -443,7 +444,7 @@ Since your graph has derivatives you can use gradient-based solvers to perform o
 - Some package ecosystems are not mature enough, e.g. survival analysis.
    But, differential equations is way more mature than other
    scientific computing languages.
-- In my point of view, Julia's strength in in **scientific computing**.
+- In my point of view, Julia's strength is in **scientific computing**.
    For all other things, you might not have additional benefits.
 :::
 
