@@ -256,6 +256,8 @@ But, no identation and every keyword needs an `end`.
 
 ::: {.column width="50%"}
 
+Julia:
+
 ```julia
 for i in 1:10
     println(i)
@@ -265,6 +267,8 @@ end
 :::
 
 ::: {.column width="50%"}
+
+Python:
 
 ```python
 for i in range(10):
@@ -308,7 +312,7 @@ If you need to find something just use the
 - And you can also create new functions for other Package's types.
 :::
 
-## Composability - Example with `Point`
+## Composability --- Example with `Point`
 
 ```{julia}
 #| output: false
@@ -340,7 +344,7 @@ p1 + p2
 distance(p1, p2)
 ```
 
-## Composability - Example with Autodiff {.smaller}
+## Composability --- Example with Autodiff {.smaller}
 
 Suppose you are creating a new sort of graph structure that allows for differentiation and integration, i.e you can take gradients, Jacobians, Hessians and so on.
 
@@ -365,7 +369,7 @@ Imagine having to code the whole API in `libtorch` (`PyTorch` C++ backend). Incl
 And in the end you can *only* use PyTorch.
 You would have to do the whole thing again for JAX or any other autodiff backend.
 
-## Composability - Example with Autodiff (Julia) {.smaller}
+## Composability --- Example with Autodiff (Julia) {.smaller}
 
 Now let's see how we do this in Julia?
 
@@ -393,7 +397,7 @@ Now we can use you differential graphs with all of these backends:
 Since your graph has derivatives you can use gradient-based solvers to perform optimization.
 :::
 
-## Composability - Examples from the Julia Ecosystem
+## Composability --- Examples from the Julia Ecosystem
 
 ::: incremental
 
@@ -463,6 +467,19 @@ Since your graph has derivatives you can use gradient-based solvers to perform o
 these are all clickable links
 :::
 
+## Conclusions
+
+:::incremental
+
+- Julia is pretty darn awesome.
+- Easy to get going, and you can always make it faster by
+   just optimizing your Julia code.
+- No need to drop down to C++.
+- Buuuut it can't beat Python at deep learning.
+- Otherwise, it's worth a try.
+- Godspeed to you.
+:::
+
 ## Packages Used
 
 :::: {.columns}
@@ -502,3 +519,10 @@ print(f"pandas: {pd.__version__}")
 
 :::
 ::::
+
+## System Information
+
+```{julia}
+#| echo: false
+versioninfo()
+```
