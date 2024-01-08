@@ -52,11 +52,11 @@ jobs:
         uses: quarto-dev/quarto-actions/render@v2
         with:
           to: html # If set, it will be equivalent to `quarto render --to html`
+          path: index.qmd
 
       - name: Make preview available
         if: ${{ github.event_name == 'pull_request' }}
         uses: actions/upload-artifact@v4
         with:
           name: html-preview
-          # path: ./_site
-          path: "${{ env.QUARTO_OUTPUT }}"
+          path: ./index.html
