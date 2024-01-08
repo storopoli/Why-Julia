@@ -32,6 +32,8 @@ jobs:
         uses: julia-actions/setup-julia@v1
         with:
           version: "1"
+      - name: Cache Julia
+        uses: julia-actions/cache@v1
       - name: Instantiate Julia project
         run: julia --color=yes --project -e 'using Pkg; Pkg.instantiate()'
 
