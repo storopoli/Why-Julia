@@ -9,10 +9,10 @@ on:
       - master
   workflow_dispatch:
 
-name: Render and Publish
+name: Render
 
 jobs:
-  build-deploy:
+  build:
     runs-on: ubuntu-latest
     env:
       JULIA_NUM_THREADS: "auto"
@@ -50,7 +50,6 @@ jobs:
         uses: quarto-dev/quarto-actions/render@v2
         with:
           to: html # If set, it will be equivalent to `quarto render --to html`
-          path: "." # By default, the current working dir is used i.e `quarto render .`
 
       - name: Make preview available
         if: ${{ github.event_name == 'pull_request' }}
@@ -58,4 +57,4 @@ jobs:
         with:
           name: html-preview
           # path: ./_site
-          path: "${{ env.QUARTO_OUTPUT}}"
+          path: "${{ env.QUARTO_OUTPUT }}"
