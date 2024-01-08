@@ -418,7 +418,7 @@ Since your graph has derivatives you can use gradient-based solvers to perform o
    You don't need to learn specific package syntax to be effective in
    using a certain package.
 - A bliss to install in Windows, Mac, and Linux (even in clusters).
-- Very good community, check the [discourse](discourse.julialang.org).
+- Very good community, check the [discourse](https://discourse.julialang.org).
 - Very "nerdy", "mathy", and "geeky" userbase.
 - If you are creating new stuff, like research or algorithms,
    you don't want to have to stumble upon FORTRAN or C code
