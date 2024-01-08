@@ -1,6 +1,8 @@
 on:
   push:
-    branches: main
+    branches:
+      - main
+      - master
   workflow_dispatch:
 
 name: Render and Publish
@@ -8,6 +10,12 @@ name: Render and Publish
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      # For the push to `gh-pages` branch.
+      contents: write
+      pages: write
+    env:
+      JULIA_NUM_THREADS: "auto"
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
