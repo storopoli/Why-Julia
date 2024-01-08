@@ -1,5 +1,14 @@
 name: Check Typos
-on: [push, pull_request, workflow_dispatch]
+on:
+  push:
+      branches:
+          - master
+          - main
+  pull_request:
+      branches:
+          - master
+          - main
+  workflow_dispatch: null
 
 jobs:
   run:
