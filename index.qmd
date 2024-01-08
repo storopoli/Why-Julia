@@ -248,7 +248,7 @@ The syntax is quite similar to Python.
 
 . . .
 
-But, no identation and every keyword needs an `end`.
+But, no indentation and every keyword needs an `end`.
 
 . . .
 
