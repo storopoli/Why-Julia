@@ -18,7 +18,7 @@ jobs:
       JULIA_NUM_THREADS: "auto"
     steps:
       - name: Check out repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
@@ -28,6 +28,17 @@ jobs:
           # uncomment below and fill to pin a version
           # version: SPECIFIC-QUARTO-VERSION-HERE
       
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
+          cache: 'pip'
+      - name: Install Jupyter
+        run: pip install jupyter jupyter-cache
+      - name: Install Python project
+        run: pip install -r requirements.txt
+      - run: echo "PYTHON=$(which python)" >> $GITHUB_ENV
+
       - name: Set up Julia
         uses: julia-actions/setup-julia@v1
         with:
@@ -37,21 +48,12 @@ jobs:
       - name: Instantiate Julia project
         run: julia --color=yes --project -e 'using Pkg; Pkg.instantiate()'
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
-          cache: 'pip'
-      - name: Install Jupyter
-        run: pip install jupyter # (if jupyter is not part of your requirements.txt)
-      - name: Install Python project
-        run: pip install -r requirements.txt
-      - run: echo "PYTHON=$(which python)" >> $GITHUB_ENV
-
       - name: Publish to GitHub Pages (and render)
         uses: quarto-dev/quarto-actions/publish@v2
         with:
           target: gh-pages
+          to: html # If set, it will be equivalent to `quarto render --to html`
+          path: index.qmd
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # this secret is always available for github actions
       
