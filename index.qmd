@@ -15,7 +15,7 @@ format:
 execute:
   echo: true
   cache: true
-jupyter: julia-1.8
+jupyter: julia-1.10
 ---
 
 ```{julia}
