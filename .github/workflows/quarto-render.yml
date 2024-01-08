@@ -3,17 +3,17 @@ on:
     branches:
       - main
       - master
+  pull_request:
+    branches:
+      - main
+      - master
   workflow_dispatch:
 
-name: Render and Publish
+name: Render
 
 jobs:
-  build-deploy:
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      # For the push to `gh-pages` branch.
-      contents: write
-      pages: write
     env:
       JULIA_NUM_THREADS: "auto"
     steps:
@@ -48,11 +48,15 @@ jobs:
       - name: Instantiate Julia project
         run: julia --color=yes --project -e 'using Pkg; Pkg.instantiate()'
 
-      - name: Publish to GitHub Pages (and render)
-        uses: quarto-dev/quarto-actions/publish@v2
+      - name: Render Quarto Project
+        uses: quarto-dev/quarto-actions/render@v2
         with:
-          target: gh-pages
+          to: html # If set, it will be equivalent to `quarto render --to html`
           path: index.qmd
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # this secret is always available for github actions
-      
+
+      - name: Make preview available
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: html-preview
+          path: ./index.html
